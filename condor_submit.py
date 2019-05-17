@@ -69,12 +69,12 @@ def prep_condor(process, workpath, logpath, user, njobs=1):
         f'transfer_input_files = {workpath}/submit.tgz\n'
         f'transfer_output_files = ""\n'
         f'input = /dev/null\n'
-        f'output = {logpath}/$(Cluster)_$(Process).out\n'
-        f'error = {logpath}/$(Cluster)_$(Process).err\n'
-        f'log = {logpath}/$(Cluster)_$(Process).log\n'
+        f'output = {logpath}/$(Cluster)_$(process).out\n'
+        f'error = {logpath}/$(Cluster)_$(process).err\n'
+        f'log = {logpath}/$(Cluster)_$(process).log\n'
         f'rank = Mips\n'
         f'request_memory = 8000\n'
-        f'arguments = $(Process)\n'
+        f'arguments = $(process)\n'
         f'#on_exit_hold = (ExitBySignal == True) || (ExitCode != 0)\n'
         f'notify_user = {user}@cornell.edu\n'
         f'+AccountingGroup = "analysis.{user}"\n'
@@ -116,7 +116,7 @@ if __name__ == "__main__":
     submitpath = os.getcwd() + '/submissions'
     if not os.path.isdir(submitpath):
         os.mkdir(submitpath)
-    workpath = submitpath + '/submit_' + Process
+    workpath = submitpath + '/submit_' + process
     if os.path.isdir(workpath):
         os.system(f'rm -rf {workpath}')
     os.mkdir(workpath)
