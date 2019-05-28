@@ -12,11 +12,20 @@ def prep_submit(infile, workpath, year):
     lhe_dir = '_'.join(infile.split('_')[0:3])
 
     stage_out_piece = (
-        f'remoteDIR="/store/group/lpcmetx/iDM/LHE/2018/signal"\n'
-        f'for f in `ls ./{lhe_dir}/*.lhe`; do\n'
-        f'    cmd="xrdcp -vf file:///$PWD/$f root://cmseos.fnal.gov/$remoteDIR/$f"\n'
+   #    # f'remoteDIR="/store/group/lpcmetx/iDM/LHE/2018/signal"\n'
+        f'remoteDIR="/afs/cern.ch/work/m/mireid/genproductions/bin/MadGraph5_aMCatNLO/iDM-analysis-LHEproducer/LHEs"\n'
+	#f'for g in `ls $PWD/*/*.lhe`; do\n'
+	#f'echo $g\n'
+	f'for f in `ls $PWD/{lhe_dir}/`; do\n'
+	f'echo $f\n'
+	#f'for f in `ls file:///$PWD/*.lhe`; do\n'
+        #f'for f in `ls ./{lhe_dir}/*.lhe`; do\n'
+        #f'    cmd="xrdcp -vf file:///$PWD/$f root://cmseos.fnal.gov/$remoteDIR/$f"\n'
+        f'    cmd="cp -vrf $PWD/{lhe_dir}/$f $remoteDIR/$f"\n'
+        #f'    cmd="cp -vrf file:///$PWD/$g/$f $remoteDIR/$f"\n'
         f'    echo $cmd && eval $cmd\n'
         f'done\n'
+	f'done\n'
     )
 
     try:
@@ -68,6 +77,7 @@ def prep_condor(process, workpath, logpath, user, njobs=1):
         f'when_to_transfer_output = ON_EXIT\n'
         f'transfer_input_files = {workpath}/submit.tgz\n'
         f'transfer_output_files = ""\n'
+#        f'transfer_output_files = /afs/cern.ch/work/m/mireid/genproductions/bin/MadGraph5_aMCatNLO/iDM-analysis-LHEproducer/LHEs\n'
         f'input = /dev/null\n'
         f'output = {logpath}/$(Cluster)_$(process).out\n'
         f'error = {logpath}/$(Cluster)_$(process).err\n'
